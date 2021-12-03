@@ -1,35 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './App.css';
-import { child, onValue, push, ref } from 'firebase/database';
-import { database } from './config/firebase';
-
-interface Guest {
-  name: string;
-}
+import useGuest from './hooks/useGuests';
+import useGuestActions from './hooks/useGuestsActions';
 
 const App = () => {
-  const [guests, setGuests] = useState<Record<string, Guest>>({});
-  const addData = async () => {
-    try {
-      const id = push(child(ref(database), 'guests'), {
-        name: 'John Doe',
-      }).key;
-      console.log('Document written with ID: ', id);
-    } catch (e) {
-      console.error('Error adding document: ', e);
-    }
+  const { guests } = useGuest();
+  const { createGuest, updateGuest, deleteGuest } = useGuestActions();
+
+  const addData = () => {
+    createGuest({
+      name: 'John Doe',
+      code: 'ABC123',
+      tags: ['noivo'],
+    });
   };
 
-  useEffect(() => {
-    const guestsRef = child(ref(database), 'guests');
-    onValue(guestsRef, (snapshot) => {
-      const data: Record<string, Guest> = snapshot.val();
-      if (data) {
-        console.log('Guests Retrieved', data);
-        setGuests(data);
-      }
+  const updateData = (id: string) => {
+    updateGuest(id, {
+      name: 'John Doe UPDATED',
+      tags: ['noiva'],
     });
-  }, []);
+  };
+
+  const deleteData = (id: string) => {
+    deleteGuest(id);
+  };
 
   return (
     <div className="App">
@@ -37,8 +32,12 @@ const App = () => {
         <button onClick={addData}>Add</button>
         <div>
           <ul>
-            {Object.keys(guests).map((guestId) => (
-              <li key={guestId}>{guests[guestId].name}</li>
+            {guests.map((guest) => (
+              <li key={guest.id}>
+                {guest.name}{' '}
+                <button onClick={() => updateData(guest.id)}>Update</button>
+                <button onClick={() => deleteData(guest.id)}>Delete</button>
+              </li>
             ))}
           </ul>
         </div>
