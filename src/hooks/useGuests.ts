@@ -22,6 +22,7 @@ const useGuests = (): UseGuestsReturn => {
   }, []);
 
   const getGuestsByCode = (code: string): Guest | null => {
+    console.log('getGuestsByCode:guests', guests);
     for (const guest of guests) {
       if (guest.code === code) {
         return guest;

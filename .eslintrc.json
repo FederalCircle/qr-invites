@@ -23,6 +23,13 @@
     "react/function-component-definition": "off",
     "arrow-body-style": "off",
     "react/button-has-type": "off",
+    "react/prop-types": "off",
+    "react/jsx-props-no-spreading": [
+      "warn",
+      {
+        "html": "ignore"
+      }
+    ],
     "@typescript-eslint/no-use-before-define": ["error"],
     "react/jsx-filename-extension": ["warn", { "extensions": [".tsx"] }],
     "prettier/prettier": "error",

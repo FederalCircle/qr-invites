@@ -10,8 +10,8 @@ const HomePage = () => {
 
   const addData = () => {
     createGuest({
-      name: 'John Doe',
-      code: 'ABC123',
+      name: 'Alyson Maia',
+      code: 'HXV5610',
       tags: ['noivo'],
     });
   };

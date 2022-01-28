@@ -1,53 +1,61 @@
-import React from 'react';
+/* eslint-disable no-alert */
+/* eslint-disable no-console */
+import React, { useEffect, useState } from 'react';
 import useGuests from '@/hooks/useGuests';
 import useGuestsActions from '@/hooks/useGuestsActions';
-import { Guest } from '@/types';
+import Scanner from './Scanner';
+import useCodeCheckin from './useCodeCheckin';
 
 const ScanPage = () => {
-  const { getGuestsByCode } = useGuests();
+  const [code, setCode] = useState('');
+  const { guests, getGuestsByCode } = useGuests();
   const { checkinGuest } = useGuestsActions();
+  const { startCodeCheckin, confirmGuest } = useCodeCheckin();
 
-  const promptCode = (retry = false) => {
-    // TODO: Improve
-    const retryText = 'Verifique o código e tente novamente.\n';
-    const promptText = 'Informe o código do convite.\n';
-    const exampleText = 'Ex: ABC-1234\n';
-    // eslint-disable-next-line no-alert
-    let code = window.prompt((retry ? retryText : promptText) + exampleText);
-    if (code) {
-      code = code
-        .trim()
-        .toUpperCase()
-        .replace(/[^A-Za-z0-9]/g, '');
-    }
-    return code;
+  const handleScannerSuccess = async (data: string) => {
+    console.log('QRCode: ', data);
+    const newCode = data
+      .trim()
+      .toUpperCase()
+      .replace(/[^A-Za-z0-9]/g, '');
+    setCode(newCode);
   };
 
-  const confirmGuest = (guest: Guest) => {
-    const confirmText = `Convidado: ${guest.name.toUpperCase()}
-    \nDeseja confirmar o checkin?`;
-    // eslint-disable-next-line no-alert
-    return window.confirm(confirmText);
-  };
+  useEffect(() => {
+    (async () => {
+      // TODO: merge with useCodeCheckin.tsx and isolate UI actions
+      const guest = getGuestsByCode(code);
+      console.log('guest', guest);
+      if (guest && confirmGuest(guest)) {
+        await checkinGuest(guest.id);
+        alert(`Checking de ${guest.name.toUpperCase()} realizado com sucesso!`);
+      }
+    })();
+  }, [code]);
 
-  const handleCodeCheckinClick = () => {
-    let retry = false;
-    let guest: Guest | null = null;
-    do {
-      const code = promptCode(retry);
-      if (code === null) break; // Cancel button
-      guest = getGuestsByCode(code);
-      retry = true;
-    } while (guest === null);
-
-    if (guest && confirmGuest(guest)) {
-      checkinGuest(guest.id);
-    }
-  };
-
+  console.log('ScanPage:guests', guests);
   return (
     <div>
-      <button onClick={handleCodeCheckinClick}>Inserir código</button>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          overflow: 'hidden',
+        }}
+      >
+        <Scanner
+          id="qrScanner"
+          style={{ height: '100vh' }}
+          onSuccess={handleScannerSuccess}
+        />
+      </div>
+      <button
+        onClick={startCodeCheckin}
+        style={{ position: 'absolute', bottom: 100, left: '36%' }}
+      >
+        Inserir código
+      </button>
     </div>
   );
 };
