@@ -2,6 +2,7 @@ export interface Guest {
   id: string;
   name: string;
   code: string;
+  hasCheckin?: boolean;
   tags: string[];
 }
 

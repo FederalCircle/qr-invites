@@ -12,8 +12,8 @@ const useGuestActions = () => {
       const payload = { ...guest, ...data };
       await update(guestRef, payload);
       console.log('Guest updated', payload);
-    } catch (e) {
-      console.error('Error updating guest: ', e);
+    } catch (error) {
+      console.error('Error updating guest: ', error);
     }
   };
 
@@ -26,8 +26,8 @@ const useGuestActions = () => {
         await update(newGuestRef, newGuestPayload);
         console.log('Guest created', newGuestPayload);
       }
-    } catch (e) {
-      console.error('Error creating guest: ', e);
+    } catch (error) {
+      console.error('Error creating guest: ', error);
     }
   };
 
@@ -36,8 +36,20 @@ const useGuestActions = () => {
       const guestRef = child(guestsRef, id);
       await remove(guestRef);
       console.log('Guest deleted', id);
-    } catch (e) {
-      console.error('Error deleting guest: ', e);
+    } catch (error) {
+      console.error('Error deleting guest: ', error);
+    }
+  };
+
+  const checkinGuest = async (id: string) => {
+    try {
+      const guestRef = child(guestsRef, id);
+      const guest: Guest = (await get(guestRef)).val();
+      const payload: Guest = { ...guest, hasCheckin: true };
+      await update(guestRef, payload);
+      console.log('Guest updated', payload);
+    } catch (error) {
+      console.error('Error checkin guest: ', error);
     }
   };
 
@@ -45,6 +57,7 @@ const useGuestActions = () => {
     updateGuest,
     createGuest,
     deleteGuest,
+    checkinGuest,
   };
 };
 
