@@ -1,6 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import useGuest from '@/hooks/useGuests';
 import useGuestActions from '@/hooks/useGuestsActions';
+import RoutePaths from '@/enums/RoutePaths';
 
 const HomePage = () => {
   const { guests } = useGuest();
@@ -27,6 +29,8 @@ const HomePage = () => {
 
   return (
     <header className="App-header">
+      <Link to={RoutePaths.scanPage}>SCAN PAGE</Link>
+      <Link to={RoutePaths.listPage}>LIST PAGE</Link>
       <button onClick={addData}>Add</button>
       <div>
         <ul>
