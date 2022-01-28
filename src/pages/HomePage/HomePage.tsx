@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import useGuest from '@/hooks/useGuests';
-import useGuestActions from '@/hooks/useGuestsActions';
+import useGuests from '@/hooks/useGuests';
+import useGuestsActions from '@/hooks/useGuestsActions';
 import RoutePaths from '@/enums/RoutePaths';
 
 const HomePage = () => {
-  const { guests } = useGuest();
-  const { createGuest, updateGuest, deleteGuest } = useGuestActions();
+  const { guests } = useGuests();
+  const { createGuest, updateGuest, deleteGuest } = useGuestsActions();
 
   const addData = () => {
     createGuest({

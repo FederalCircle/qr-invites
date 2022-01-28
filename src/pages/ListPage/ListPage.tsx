@@ -1,10 +1,10 @@
 import React from 'react';
-import useGuest from '@/hooks/useGuests';
-import useGuestActions from '@/hooks/useGuestsActions';
+import useGuests from '@/hooks/useGuests';
+import useGuestsActions from '@/hooks/useGuestsActions';
 
 const ListPage = () => {
-  const { guests } = useGuest();
-  const { checkinGuest } = useGuestActions();
+  const { guests } = useGuests();
+  const { checkinGuest } = useGuestsActions();
 
   return (
     <div>

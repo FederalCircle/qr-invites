@@ -1,8 +1,9 @@
+/* eslint-disable no-console */
 import { child, get, push, ref, update, remove } from 'firebase/database';
 import { database } from '@/config/firebase';
 import { CreateGuestDto, Guest, UpdateGuestDto } from '@/types';
 
-const useGuestActions = () => {
+const useGuestsActions = () => {
   const guestsRef = child(ref(database), 'guests');
 
   const updateGuest = async (id: string, data: UpdateGuestDto) => {
@@ -61,4 +62,4 @@ const useGuestActions = () => {
   };
 };
 
-export default useGuestActions;
+export default useGuestsActions;
