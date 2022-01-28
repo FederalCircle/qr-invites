@@ -4,6 +4,7 @@ import debounce from 'lodash.debounce';
 import useGuests from '@/hooks/useGuests';
 import useGuestsActions from '@/hooks/useGuestsActions';
 import { Guest } from '@/types';
+import AppBar from '@/components/AppBar';
 
 const ListPage = () => {
   const { guests, getGuestsByName } = useGuests();
@@ -32,7 +33,8 @@ const ListPage = () => {
   }, [guests]);
 
   return (
-    <div style={{ color: 'white' }}>
+    <>
+      <AppBar title="Convidados" />
       <input type="text" onChange={handleInputChange} />
       <ul>
         {guestsList.map((guest) => (
@@ -41,12 +43,12 @@ const ListPage = () => {
             {guest.hasCheckin ? (
               'DONE'
             ) : (
-              <button onClick={() => checkinGuest(guest.id)}>Checkin</button>
+              <button onClick={() => checkinGuest(guest.id)}>Check-in</button>
             )}
           </li>
         ))}
       </ul>
-    </div>
+    </>
   );
 };
 

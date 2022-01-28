@@ -41,7 +41,7 @@ const useCodeCheckin = () => {
 
     if (guest && confirmGuest(guest)) {
       await checkinGuest(guest.id);
-      alert(`Checking de ${guest.name.toUpperCase()} realizado com sucesso!`);
+      alert(`Check-in de ${guest.name.toUpperCase()} realizado com sucesso!`);
     }
   };
 

@@ -4,6 +4,7 @@ import useGuests from '@/hooks/useGuests';
 import useGuestsActions from '@/hooks/useGuestsActions';
 import Scanner from './Scanner';
 import useCodeCheckin from './useCodeCheckin';
+import AppBar from '@/components/AppBar';
 
 const ScanPage = () => {
   const [code, setCode] = useState('');
@@ -23,16 +24,16 @@ const ScanPage = () => {
     (async () => {
       // TODO: merge with useCodeCheckin.tsx and isolate UI actions
       const guest = getGuestByCode(code);
-      console.log('guest', guest);
       if (guest && confirmGuest(guest)) {
         await checkinGuest(guest.id);
-        alert(`Checking de ${guest.name.toUpperCase()} realizado com sucesso!`);
+        alert(`Check-in de ${guest.name.toUpperCase()} realizado com sucesso!`);
       }
     })();
   }, [code]);
 
   return (
-    <div>
+    <>
+      <AppBar title="Check-in" />
       <div
         style={{
           display: 'flex',
@@ -53,7 +54,7 @@ const ScanPage = () => {
       >
         Inserir código
       </button>
-    </div>
+    </>
   );
 };
 

@@ -1,49 +1,42 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import useGuests from '@/hooks/useGuests';
-import useGuestsActions from '@/hooks/useGuestsActions';
+import { useNavigate } from 'react-router-dom';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+
 import RoutePaths from '@/enums/RoutePaths';
+import BasicLayout from '@/components/BasicLayout';
 
 const HomePage = () => {
-  const { guests } = useGuests();
-  const { createGuest, updateGuest, deleteGuest } = useGuestsActions();
-
-  const addData = () => {
-    createGuest({
-      name: 'Alyson Maia',
-      code: 'HXV5610',
-      tags: ['noivo'],
-    });
-  };
-
-  const updateData = (id: string) => {
-    updateGuest(id, {
-      name: 'John Doe UPDATED',
-      tags: ['noiva'],
-    });
-  };
-
-  const deleteData = (id: string) => {
-    deleteGuest(id);
-  };
-
+  const navigate = useNavigate();
   return (
-    <header className="App-header">
-      <Link to={RoutePaths.scanPage}>SCAN PAGE</Link>
-      <Link to={RoutePaths.listPage}>LIST PAGE</Link>
-      <button onClick={addData}>Add</button>
-      <div>
-        <ul>
-          {guests.map((guest) => (
-            <li key={guest.id}>
-              {guest.name}{' '}
-              <button onClick={() => updateData(guest.id)}>Update</button>
-              <button onClick={() => deleteData(guest.id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </header>
+    <BasicLayout appBarProps={{ hasBackButton: false, title: 'Home' }}>
+      <Grid
+        container
+        direction="column"
+        justifyContent="center"
+        alignContent="center"
+        spacing={5}
+      >
+        <Grid item>
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={() => navigate(RoutePaths.scanPage)}
+          >
+            Check-in
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={() => navigate(RoutePaths.listPage)}
+          >
+            Convidados
+          </Button>
+        </Grid>
+      </Grid>
+    </BasicLayout>
   );
 };
 
