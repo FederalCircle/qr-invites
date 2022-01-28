@@ -1,5 +1,4 @@
 /* eslint-disable no-alert */
-/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import useGuests from '@/hooks/useGuests';
 import useGuestsActions from '@/hooks/useGuestsActions';
@@ -8,12 +7,11 @@ import useCodeCheckin from './useCodeCheckin';
 
 const ScanPage = () => {
   const [code, setCode] = useState('');
-  const { guests, getGuestsByCode } = useGuests();
+  const { getGuestByCode } = useGuests();
   const { checkinGuest } = useGuestsActions();
   const { startCodeCheckin, confirmGuest } = useCodeCheckin();
 
   const handleScannerSuccess = async (data: string) => {
-    console.log('QRCode: ', data);
     const newCode = data
       .trim()
       .toUpperCase()
@@ -24,7 +22,7 @@ const ScanPage = () => {
   useEffect(() => {
     (async () => {
       // TODO: merge with useCodeCheckin.tsx and isolate UI actions
-      const guest = getGuestsByCode(code);
+      const guest = getGuestByCode(code);
       console.log('guest', guest);
       if (guest && confirmGuest(guest)) {
         await checkinGuest(guest.id);
@@ -33,7 +31,6 @@ const ScanPage = () => {
     })();
   }, [code]);
 
-  console.log('ScanPage:guests', guests);
   return (
     <div>
       <div

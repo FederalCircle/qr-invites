@@ -3,7 +3,7 @@ import useGuests from '@/hooks/useGuests';
 import useGuestsActions from '@/hooks/useGuestsActions';
 
 const useCodeCheckin = () => {
-  const { getGuestsByCode } = useGuests();
+  const { getGuestByCode } = useGuests();
   const { checkinGuest } = useGuestsActions();
 
   const promptCode = (retry = false) => {
@@ -35,7 +35,7 @@ const useCodeCheckin = () => {
     do {
       const code = promptCode(retry);
       if (code === null) break; // Cancel button
-      guest = getGuestsByCode(code);
+      guest = getGuestByCode(code);
       retry = true;
     } while (guest === null);
 

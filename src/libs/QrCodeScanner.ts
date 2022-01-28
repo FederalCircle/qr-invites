@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-alert */
 import JsQR from 'jsqr';
-import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 
 async function requestUserMedia() {
   const mediaConstraints = {
@@ -56,7 +56,7 @@ class QrCodeScanner {
    * @prop {number} successThrottle - Time to throttle success callback
    */
   config = {
-    successThrottle: 1000,
+    successThrottle: 500,
   };
 
   /**
@@ -81,7 +81,8 @@ class QrCodeScanner {
       ...customConfig,
     };
 
-    this.onSuccess = throttle(onSuccess, this.config.successThrottle, {
+    this.onSuccess = debounce(onSuccess, this.config.successThrottle, {
+      leading: true,
       trailing: false,
     });
 

@@ -6,7 +6,8 @@ import { Guest, Snapshot } from '@/types';
 
 interface UseGuestsReturn {
   guests: Guest[];
-  getGuestsByCode: (code: string) => Guest | null;
+  getGuestByCode: (code: string) => Guest | null;
+  getGuestsByName: (input: string) => Guest[];
 }
 
 const useGuests = (): UseGuestsReturn => {
@@ -21,8 +22,7 @@ const useGuests = (): UseGuestsReturn => {
     });
   }, []);
 
-  const getGuestsByCode = (code: string): Guest | null => {
-    console.log('getGuestsByCode:guests', guests);
+  const getGuestByCode = (code: string): Guest | null => {
     for (const guest of guests) {
       if (guest.code === code) {
         return guest;
@@ -31,9 +31,15 @@ const useGuests = (): UseGuestsReturn => {
     return null;
   };
 
+  const getGuestsByName = (input: string): Guest[] => {
+    const regexp = new RegExp(input, 'i');
+    return guests.filter((guest) => regexp.test(guest.name));
+  };
+
   return {
     guests,
-    getGuestsByCode,
+    getGuestByCode,
+    getGuestsByName,
   };
 };
 
