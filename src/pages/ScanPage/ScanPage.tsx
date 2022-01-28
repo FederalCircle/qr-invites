@@ -1,10 +1,21 @@
 /* eslint-disable no-alert */
 import React, { useEffect, useState } from 'react';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material';
+
 import useGuests from '@/hooks/useGuests';
 import useGuestsActions from '@/hooks/useGuestsActions';
+import AppBar from '@/components/AppBar';
+
 import Scanner from './Scanner';
 import useCodeCheckin from './useCodeCheckin';
-import AppBar from '@/components/AppBar';
+
+const FloatingButton = styled(Button)`
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translate(-50%, 0);
+`;
 
 const ScanPage = () => {
   const [code, setCode] = useState('');
@@ -48,12 +59,13 @@ const ScanPage = () => {
           onSuccess={handleScannerSuccess}
         />
       </div>
-      <button
+      <FloatingButton
+        variant="contained"
         onClick={startCodeCheckin}
-        style={{ position: 'absolute', bottom: 100, left: '36%' }}
+        // style={{ position: 'absolute', bottom: 100, left: '50%' }}
       >
         Inserir código
-      </button>
+      </FloatingButton>
     </>
   );
 };
