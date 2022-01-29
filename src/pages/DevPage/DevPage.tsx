@@ -1,9 +1,14 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-alert */
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
+
 import useGuests from '@/hooks/useGuests';
 import useGuestsActions from '@/hooks/useGuestsActions';
-import RoutePaths from '@/enums/RoutePaths';
 import AppBar from '@/components/AppBar';
+import allGuests from './allGuests';
+import { Guest } from '@/types';
 
 const DevPage = () => {
   const { guests } = useGuests();
@@ -17,30 +22,63 @@ const DevPage = () => {
     });
   };
 
-  const updateData = (id: string) => {
-    updateGuest(id, {
-      name: 'John Doe UPDATED',
-      tags: ['noiva'],
-    });
+  const resetGuest = (guest: Guest) => {
+    if (window.confirm(`reset ${guest.name.toUpperCase()}?`)) {
+      updateGuest(guest.id, {
+        hasCheckin: false,
+      });
+    }
   };
 
   const deleteData = (id: string) => {
     deleteGuest(id);
   };
 
+  const insertAllGuests = () => {
+    if (window.confirm('INSERT all guests?')) {
+      allGuests.forEach((guest) => {
+        const [code, name] = guest;
+        createGuest({
+          name,
+          code,
+          tags: ['noivo'],
+        });
+      });
+    }
+  };
+
+  const removeAllGuests = () => {
+    if (window.confirm('REMOVE all guests?')) {
+      guests.forEach((guest) => {
+        deleteGuest(guest.id);
+      });
+    }
+  };
+
   return (
     <>
       <AppBar hasBackButton={false} title="DEVELOPER" />
-      <Link to={RoutePaths.scanPage}>SCAN PAGE</Link>
-      <Link to={RoutePaths.listPage}>LIST PAGE</Link>
-      <button onClick={addData}>Add</button>
+      <Button variant="contained" onClick={insertAllGuests}>
+        INSERT ALL GUESTS
+      </Button>
+      <Button variant="contained" onClick={removeAllGuests}>
+        REMOVE ALL GUESTS
+      </Button>
       <div>
         <ul>
           {guests.map((guest) => (
-            <li key={guest.id}>
-              {guest.name}{' '}
-              <button onClick={() => updateData(guest.id)}>Update</button>
-              <button onClick={() => deleteData(guest.id)}>Delete</button>
+            <li
+              key={guest.id}
+              style={{ border: '1px solid white', display: 'flex', padding: 5 }}
+            >
+              <div style={{ flex: 1 }}>
+                {guest.name}
+                <br />
+                <span>
+                  {guest.code} · {guest.hasCheckin ? 'true' : 'false'}
+                </span>
+              </div>
+              <Button onClick={() => resetGuest(guest)}>Reset</Button>
             </li>
           ))}
         </ul>

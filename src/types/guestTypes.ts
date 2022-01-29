@@ -8,4 +8,6 @@ export interface Guest {
 
 export type CreateGuestDto = Omit<Guest, 'id'>;
 
-export type UpdateGuestDto = Partial<Pick<Guest, 'name' | 'tags'>>;
+export type UpdateGuestDto = Partial<
+  Pick<Guest, 'name' | 'tags' | 'hasCheckin'>
+>;
