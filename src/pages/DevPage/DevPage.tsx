@@ -1,8 +1,17 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-alert */
-import React from 'react';
-import { Button } from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react';
+import debounce from 'lodash.debounce';
+
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputAdornment from '@mui/material/InputAdornment';
+
+import SearchIcon from '@mui/icons-material/Search';
 
 import useGuests from '@/hooks/useGuests';
 import useGuestsActions from '@/hooks/useGuestsActions';
@@ -12,7 +21,7 @@ import { Guest } from '@/types';
 import { parseCode } from '@/utils/utils';
 
 const DevPage = () => {
-  const { guests } = useGuests();
+  const { guests, getGuestsByName } = useGuests();
   const { createGuest, updateGuest, deleteGuest } = useGuestsActions();
 
   const addData = () => {
@@ -56,18 +65,58 @@ const DevPage = () => {
     }
   };
 
+  const [guestsList, setGuestsList] = useState<Guest[]>([]);
+
+  const bareHandleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const inputText = event.target.value.trim();
+    if (inputText) {
+      setGuestsList(getGuestsByName(inputText));
+    } else {
+      setGuestsList(guests);
+    }
+  };
+
+  const handleInputChange = useCallback(
+    debounce(bareHandleInputChange, 300, { leading: false }),
+    [bareHandleInputChange],
+  );
+
+  useEffect(() => {
+    setGuestsList(guests);
+  }, [guests]);
+
   return (
     <>
       <AppBar hasBackButton={false} title="DEVELOPER" />
-      <Button variant="contained" onClick={insertAllGuests}>
-        INSERT ALL GUESTS
-      </Button>
-      <Button variant="contained" onClick={removeAllGuests}>
-        REMOVE ALL GUESTS
-      </Button>
+      <Grid container justifyContent="space-around" sx={{ margin: '16px 0' }}>
+        <Button variant="contained" onClick={insertAllGuests}>
+          INSERT ALL GUESTS
+        </Button>
+        <Button variant="contained" onClick={removeAllGuests}>
+          REMOVE ALL GUESTS
+        </Button>
+      </Grid>
+
+      <FormControl variant="outlined" fullWidth>
+        <InputLabel htmlFor="search">Nome do convidado</InputLabel>
+        <OutlinedInput
+          id="search"
+          type="text"
+          endAdornment={
+            <InputAdornment position="end">
+              <SearchIcon />
+            </InputAdornment>
+          }
+          label="Password"
+          onChange={handleInputChange}
+        />
+      </FormControl>
+
       <div>
-        <ul>
-          {guests.map((guest) => (
+        <ul style={{ padding: 0 }}>
+          {guestsList.map((guest) => (
             <li
               key={guest.id}
               style={{ border: '1px solid white', display: 'flex', padding: 5 }}
