@@ -45,7 +45,7 @@ const DevPage = () => {
   };
 
   const insertAllGuests = () => {
-    if (window.confirm('INSERT all guests?')) {
+    if (window.prompt('INSERT all guests? Type CONFIRM') === 'CONFIRM') {
       allGuests.forEach((guest) => {
         const [code, name] = guest;
         createGuest({
@@ -54,14 +54,18 @@ const DevPage = () => {
           tags: ['noivo'],
         });
       });
+    } else {
+      alert('Operation not executed.');
     }
   };
 
   const removeAllGuests = () => {
-    if (window.confirm('REMOVE all guests?')) {
+    if (window.prompt('REMOVE all guests? Type CONFIRM') === 'CONFIRM') {
       guests.forEach((guest) => {
         deleteGuest(guest.id);
       });
+    } else {
+      alert('Operation not executed.');
     }
   };
 

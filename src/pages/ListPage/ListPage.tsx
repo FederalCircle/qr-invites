@@ -81,7 +81,7 @@ const ListPage = () => {
               <ListItemIcon>
                 <PersonIcon />
               </ListItemIcon>
-              <ListItemText primary={guest.name} />
+              <ListItemText primary={guest.name} secondary={guest.code} />
               {guest.hasCheckin ? (
                 <CheckIcon color="success" />
               ) : (
