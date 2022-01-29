@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { child, onValue, ref } from 'firebase/database';
 import { database } from '@/config/firebase';
 import { Guest, Snapshot } from '@/types';
+import { parseCode } from '@/utils/utils';
 
 interface UseGuestsReturn {
   guests: Guest[];
@@ -23,8 +24,10 @@ const useGuests = (): UseGuestsReturn => {
   }, []);
 
   const getGuestByCode = (code: string): Guest | null => {
+    // console.log('getGuestByCode:guests', guests);
+
     for (const guest of guests) {
-      if (guest.code === code) {
+      if (parseCode(guest.code) === parseCode(code)) {
         return guest;
       }
     }

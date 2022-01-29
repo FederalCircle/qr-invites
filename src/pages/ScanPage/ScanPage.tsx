@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 import useGuests from '@/hooks/useGuests';
 import useGuestsActions from '@/hooks/useGuestsActions';
@@ -9,6 +10,8 @@ import AppBar from '@/components/AppBar';
 
 import Scanner from './Scanner';
 import useCodeCheckin from './useCodeCheckin';
+import { parseCode } from '@/utils/utils';
+import RoutePaths from '@/enums/RoutePaths';
 
 const FloatingButton = styled(Button)`
   position: absolute;
@@ -19,15 +22,13 @@ const FloatingButton = styled(Button)`
 
 const ScanPage = () => {
   const [code, setCode] = useState('');
-  const { getGuestByCode } = useGuests();
+  const { guests, getGuestByCode } = useGuests();
   const { checkinGuest } = useGuestsActions();
   const { startCodeCheckin, confirmGuest } = useCodeCheckin();
+  const navigate = useNavigate();
 
   const handleScannerSuccess = async (data: string) => {
-    const newCode = data
-      .trim()
-      .toUpperCase()
-      .replace(/[^A-Za-z0-9]/g, '');
+    const newCode = parseCode(data);
     setCode(newCode);
   };
 
@@ -35,9 +36,12 @@ const ScanPage = () => {
     (async () => {
       // TODO: merge with useCodeCheckin.tsx and isolate UI actions
       const guest = getGuestByCode(code);
+      console.log('code', code);
+      console.log('guest', guest);
       if (guest && confirmGuest(guest)) {
         await checkinGuest(guest.id);
         alert(`Check-in de ${guest.name.toUpperCase()} realizado com sucesso!`);
+        navigate(RoutePaths.homePage);
       }
     })();
   }, [code]);

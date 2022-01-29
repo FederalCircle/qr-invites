@@ -1,10 +1,14 @@
+import { useNavigate } from 'react-router-dom';
 import { Guest } from '@/types';
 import useGuests from '@/hooks/useGuests';
 import useGuestsActions from '@/hooks/useGuestsActions';
+import { parseCode } from '@/utils/utils';
+import RoutePaths from '@/enums/RoutePaths';
 
 const useCodeCheckin = () => {
   const { getGuestByCode } = useGuests();
   const { checkinGuest } = useGuestsActions();
+  const navigate = useNavigate();
 
   const promptCode = (retry = false) => {
     // TODO: Improve
@@ -14,10 +18,7 @@ const useCodeCheckin = () => {
     // eslint-disable-next-line no-alert
     let code = window.prompt((retry ? retryText : promptText) + exampleText);
     if (code) {
-      code = code
-        .trim()
-        .toUpperCase()
-        .replace(/[^A-Za-z0-9]/g, '');
+      code = parseCode(code);
     }
     return code;
   };
@@ -42,6 +43,7 @@ const useCodeCheckin = () => {
     if (guest && confirmGuest(guest)) {
       await checkinGuest(guest.id);
       alert(`Check-in de ${guest.name.toUpperCase()} realizado com sucesso!`);
+      navigate(RoutePaths.homePage);
     }
   };
 

@@ -9,6 +9,7 @@ import useGuestsActions from '@/hooks/useGuestsActions';
 import AppBar from '@/components/AppBar';
 import allGuests from './allGuests';
 import { Guest } from '@/types';
+import { parseCode } from '@/utils/utils';
 
 const DevPage = () => {
   const { guests } = useGuests();
@@ -40,7 +41,7 @@ const DevPage = () => {
         const [code, name] = guest;
         createGuest({
           name,
-          code,
+          code: parseCode(code),
           tags: ['noivo'],
         });
       });
